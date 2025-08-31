@@ -6,7 +6,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Symfony\Component\DomCrawler\Crawler;
+
+//use Symfony\Component\DomCrawler\Crawler;
 
 //require_once 'vendor/autoload.php';
 //require_once 'FileDownloader.php';
@@ -222,16 +223,32 @@ class FileDownloader
             $html = $response->getBody()->getContents();
 
             // 2. Извлекаем _token с помощью DomCrawler
-            $crawler = new Crawler($html);
-//            $token = $crawler->filter('input[name="_token"]')->attr('value');
-            $tokenElement = $crawler->filterXpath('//input[@name="_token"]')->getNode(0);
+//            $crawler = new Crawler($html);
+////            $token = $crawler->filter('input[name="_token"]')->attr('value');
+//            $tokenElement = $crawler->filterXpath('//input[@name="_token"]')->getNode(0);
+//
+//            if ($tokenElement === null || !$tokenElement->getAttribute('value')) {
+//                $this->logger->error('_token не найден на странице');
+//                throw new \Exception("_token не найден на странице");
+//            }
+//
+//            $token = $tokenElement->getAttribute('value');
+            $token = null;
+            if (is_string($html) && $html !== '') {
+                $internalErrors = libxml_use_internal_errors(true);
+                $dom = new \DOMDocument();
+                // Поддержка UTF-8 и возможных невалидных HTML
+                $loaded = $dom->loadHTML('<?xml encoding="utf-8" ?>' . $html, LIBXML_NOWARNING | LIBXML_NOERROR);
+                libxml_use_internal_errors($internalErrors);
 
-            if ($tokenElement === null || !$tokenElement->getAttribute('value')) {
-                $this->logger->error('_token не найден на странице');
-                throw new \Exception("_token не найден на странице");
+                if ($loaded) {
+                    $xpath = new \DOMXPath($dom);
+                    $nodes = $xpath->query('//input[@name="_token"]/@value');
+                    if ($nodes !== false && $nodes->length > 0) {
+                        $token = $nodes->item(0)->nodeValue;
+                    }
+                }
             }
-
-            $token = $tokenElement->getAttribute('value');
 
             if (!$token) {
                 $this->logger->error('_token не найден на странице');
