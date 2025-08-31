@@ -44,7 +44,7 @@ use Psr\Log\NullLogger;
 
 class FileDownloader
 {
-    private const array CATEGORIES = [
+    private const CATEGORIES = [
         1 => 'Тепловая автоматика',
         475 => 'Холодильная техника',
         786 => 'Приводная техника',
