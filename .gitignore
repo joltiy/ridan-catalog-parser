@@ -1,0 +1,11 @@
+### Composer template
+composer.phar
+/vendor/
+/.phpunit.result.cache
+/coverage/
+.idea
+/composer.lock
+/junit.xml
+/products_database.sqlite
+/xolodilnaia-texnika.xlsx
+/test.php

@@ -1,0 +1,18 @@
+# Игнорировать HTML файлы в статистике языков
+tests/Mocks/*.html linguist-vendored
+tests/Mocks/*.html linguist-documentation
+tests/Mocks/*.html -linguist-detectable
+
+# Игнорировать все тестовые HTML файлы
+*.html linguist-vendored linguist-documentation
+tests/**/*.html linguist-vendored
+tests/**/*.html linguist-documentation
+
+# Указываем основной язык проекта как PHP
+*.php linguist-detectable=true
+
+# Дополнительные настройки для других файлов
+*.md linguist-documentation
+*.xml linguist-documentation
+*.yml linguist-documentation
+*.yaml linguist-documentation

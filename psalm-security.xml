@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<psalm
+        errorLevel="3"
+        resolveFromConfigFile="true"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://getpsalm.org/schema/config"
+        xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+    <projectFiles>
+        <directory name="src" />
+        <ignoreFiles>
+            <directory name="vendor" />
+        </ignoreFiles>
+    </projectFiles>
+
+    <issueHandlers>
+        <!-- Security-related issues -->
+        <ForbiddenCode errorLevel="error" />
+        <ImpureFunctionCall errorLevel="info" />
+        <ImpureMethodCall errorLevel="info" />
+
+        <!-- Input validation -->
+        <InvalidScalarArgument errorLevel="error" />
+        <InvalidReturnType errorLevel="error" />
+
+        <!-- SQL and XSS protection -->
+        <PossiblyInvalidOperand errorLevel="warning" />
+        <PossiblyNullOperand errorLevel="warning" />
+
+        <!-- File inclusion vulnerabilities -->
+        <Include errorLevel="error" />
+    </issueHandlers>
+
+    <plugins>
+        <pluginClass class="Psalm\PhpUnitPlugin\Plugin" />
+    </plugins>
+</psalm>
